@@ -77,9 +77,11 @@ public class NiDeGameController : MonoBehaviour {
 
         source.Stop();
         playerController.setControl(false);
+        scoreText.text = "";
 
         if (gameOver)
         {
+            endMessage.text = "EGG FRIED\nBetter Luck Next Time";
             source.PlayOneShot(lose);
             playerAnim.SetTrigger("lose");
             wizAnim.SetTrigger("Lose");
@@ -87,6 +89,7 @@ public class NiDeGameController : MonoBehaviour {
 
         else
         {
+            endMessage.text = "EGG DEFENDED\nThe Miracle of Life";
             source.PlayOneShot(win);
             source.PlayOneShot(bird);
             eggAnim.SetTrigger("win");
@@ -94,6 +97,7 @@ public class NiDeGameController : MonoBehaviour {
             wizAnim.SetTrigger("Win");
         }
 
+        StartCoroutine(ByeAfterDelay());
     }
 
     IEnumerator WeakAttack()
@@ -112,6 +116,14 @@ public class NiDeGameController : MonoBehaviour {
         yield return new WaitForSeconds(2);
         source.PlayOneShot(throwSound);
         Instantiate(wizard[2], fireSpawn.position, fireSpawn.rotation);
+    }
+
+    IEnumerator ByeAfterDelay()
+    {
+        yield return new WaitForSeconds(2);
+        Debug.Log("Bye bye");
+        GameLoader.AddScore(score);
+        GameLoader.gameOn = false;
     }
 
     void UpdateScore()
